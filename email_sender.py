@@ -51,7 +51,7 @@ if __name__ == "__main__":
     emails_dict = harvest_emails_fb_group_posts(group_id=group_id, pages_to_harvest=number_of_page_to_harvest,
                                                 search_keys=search_words)
     sorted_emails_tup_list = sort_list_by_dict_counter(emails_dict)
-    grade =
+    grade = 2
     mail_content = open("C:\\Users\\erann\\Desktop\\Eran Nir\\My Projects\\small_projects\\mail_content").read()
     mail_subject = 'Eran Nir - Resume'
     mail_attach = "C:\\Users\\erann\\Desktop\\Eran Nir\\My Projects\\small_projects\\Eran Nir - Resume.pdf"
