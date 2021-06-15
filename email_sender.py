@@ -1,5 +1,6 @@
 import logging
 import smtplib
+import pickle
 from creds import gmail_username, gmail_password
 from facebook_8200_scrapper import harvest_emails_fb_group_posts, sort_list_by_dict_counter
 from email.mime.multipart import MIMEMultipart
@@ -42,12 +43,19 @@ def send_resume_to_rec(emails_list, grade, mail_subject, mail_content, attachmen
             sent_email_addresses.append(receiver)
         else:
             logging.info("Did not send mail to {} due to low grade.".format(receiver))
+    return sent_email_addresses
+
+
+def upload_list_pickle(list_to_upload, path, upload=False):
+    if upload:
+        with open(sent_email_addresses_path, "wb") as seap:  # Pickling
+            pickle.dump(sent_email_addresses, seap)
 
 
 if __name__ == "__main__":
     search_words = ['student', 'software']
     group_id = '232940231122621'
-    number_of_page_to_harvest = 2
+    number_of_page_to_harvest = 10
     emails_dict = harvest_emails_fb_group_posts(group_id=group_id, pages_to_harvest=number_of_page_to_harvest,
                                                 search_keys=search_words)
     sorted_emails_tup_list = sort_list_by_dict_counter(emails_dict)
@@ -55,4 +63,6 @@ if __name__ == "__main__":
     mail_content = open("C:\\Users\\erann\\Desktop\\Eran Nir\\My Projects\\small_projects\\mail_content").read()
     mail_subject = 'Eran Nir - Resume'
     mail_attach = "C:\\Users\\erann\\Desktop\\Eran Nir\\My Projects\\small_projects\\Eran Nir - Resume.pdf"
-    send_resume_to_rec(sorted_emails_tup_list, grade, mail_subject, mail_content, mail_attach)
+    sent_email_addresses = send_resume_to_rec(sorted_emails_tup_list, grade, mail_subject, mail_content, mail_attach)
+    sent_email_addresses_path = 'C:\\Users\\erann\\Desktop\\Eran Nir\\My Projects\\small_projects\\sent_email_addresses.pkl'
+    upload_list_pickle(list_to_upload=sent_email_addresses, path=sent_email_addresses_path, upload=False)

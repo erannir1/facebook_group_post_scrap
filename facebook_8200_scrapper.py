@@ -1,14 +1,21 @@
 import logging
+import pickle
 from facebook_scraper import get_posts
 from creds import fb_username, fb_password
 
 
 def harvest_emails_fb_group_posts(group_id, pages_to_harvest, search_keys):
+    sent_email_addresses_path = 'C:\\Users\\erann\\Desktop\\Eran Nir\\My Projects\\small_projects\\sent_email_addresses.pkl'
+    try:
+        with open(sent_email_addresses_path, "rb") as seap:   # Unpickling
+            sent_email_addresses = pickle.load(seap)
+    except FileNotFoundError as e:
+        sent_email_addresses = []
     rec_email_dict = {}
     for post in get_posts('232940231122621', pages=10, credentials=(fb_username, fb_password)):
         for word in (post['text']).split():
             word_pro = [word.upper(), word.lower()] + word.split(',./[]?\`~!@#$%^&*()_+=-><";:')
-            if '@' in word:
+            if '@' in word and word not in sent_email_addresses:
                 email = word
                 try:
                     rec_email_dict[email] += 1
