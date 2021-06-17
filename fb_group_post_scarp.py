@@ -22,20 +22,20 @@ def get_rec_email(post_dict):
     except FileNotFoundError as fnfe:
         sent_email_addresses = []
     for post_id in post_dict:
-        for word in post_dict[post_id['post_replaced_text']].split():
+        for word in post_dict[post_id]['post_replaced_text'].split():
             if '@' in word and word not in sent_email_addresses:
-                post_dict[post_id['email']] = word
+                post_dict[post_id]['email'] = word
     return post_dict
 
 
 def grade_post(post_dict, search_keys):
     for post_id in post_dict:
         search_keys_copy = search_keys
-        for word in post_dict[post_id['post_replaced_text']].split():
+        for word in post_dict[post_id]['post_replaced_text'].split():
             word_pro = [word.upper(), word.lower()]
             for search_word in search_keys_copy:
                 if search_word in word_pro:
-                    post_dict[post_id['grade']] += 1
+                    post_dict[post_id]['grade'] += 1
                     search_keys_copy.remove(search_word)
     return post_dict
 
@@ -43,7 +43,7 @@ def grade_post(post_dict, search_keys):
 def get_emails_and_grades(post_dict):
     emails_list = []
     for post_id in post_dict:
-        if post_dict[post_id["email"]] is not None:
+        if post_dict[post_id]["email"] is not None:
             emails_list.append((post_id, post_id["email"], post_id["grade"]))
     return emails_list
 
