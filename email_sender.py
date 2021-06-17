@@ -2,7 +2,7 @@ import logging
 import smtplib
 import pickle
 from creds import gmail_username, gmail_password
-from facebook_group_post_scrapper import harvest_emails_fb_group_posts, sort_list_by_dict_counter
+from facebook_group_post_scrapper import harvest_emails_fb_group_posts, get_mail_list_from_dict
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -57,8 +57,8 @@ def upload_list_pickle(list_to_upload, path, upload=False):
 if __name__ == "__main__":
     emails_dict = harvest_emails_fb_group_posts(group_id=group_id, pages_to_harvest=number_of_page_to_harvest,
                                                 search_keys=search_words)
-    sorted_emails_tup_list = sort_list_by_dict_counter(emails_dict)
-    grade = len(search_words)
+    sorted_emails_tup_list = get_mail_list_from_dict(emails_dict)
+    grade = len(search_words) * 0.4
     mail_content = open(mail_content_path).read()
     sent_email_addresses_list = send_resume_to_rec(sorted_emails_tup_list,
                                                    grade, mail_subject, mail_content, mail_attach)
