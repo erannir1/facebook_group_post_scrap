@@ -14,17 +14,14 @@ from parameters import sent_email_addresses_path, search_words, group_id, mail_s
 def send_resume_to_rec(emails_list, mail_grade, mail_subject_line, email_content, attachment):
     sent_email_addresses = []
     # The mail addresses and password
-    sender_address = gmail_username
-    sender_pass = gmail_password
     for receiver in emails_list:
         if receiver[2] >= mail_grade and receiver[1] not in sent_email_addresses:
             # Setup the MIME
             message = MIMEMultipart()
-            message['From'] = "Eran Nir <{}>".format(sender_address)
+            message['From'] = "Eran Nir <{}>".format(gmail_username)
             message['To'] = receiver[1]
             message['Subject'] = mail_subject_line  # The subject line
             # The body and the attachments for the mail
-
             message.attach(MIMEText(email_content, 'plain'))
             payload = MIMEBase('application', "octet-stream")
             with open(attachment, 'rb') as attach_file:  # Open the file as binary mode
@@ -37,9 +34,9 @@ def send_resume_to_rec(emails_list, mail_grade, mail_subject_line, email_content
             # Create SMTP session for sending the mail
             session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
             session.starttls()  # enable security
-            session.login(sender_address, sender_pass)  # login with mail_id and password
+            session.login(gmail_username, gmail_password)  # login with mail_id and password
             text = message.as_string()
-            session.sendmail(sender_address, receiver[1], text)
+            session.sendmail(gmail_username, receiver[1], text)
             session.quit()
             logging.info('Mail sent to: %s', receiver[1])
             sent_email_addresses.append(receiver)
