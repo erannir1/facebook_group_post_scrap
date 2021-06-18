@@ -40,12 +40,25 @@ def grade_post(post_dict, search_keys):
     return post_dict
 
 
-def get_emails_and_grades(post_dict):
+def get_emails_and_grades(post_dict, sort=False):
     emails_list = []
     for post_id in post_dict:
         if post_dict[post_id]["email"] is not None:
             emails_list.append((post_id, post_dict[post_id]["email"], post_dict[post_id]["grade"]))
+    if sort:
+        emails_list.sort(key=lambda tup: tup[2], reverse=True)
     return emails_list
+
+
+def get_emails_above_grade(emails_list, min_grade, is_list_sorted=False):
+    emails_above_grade = []
+    for email in emails_list:
+        if is_list_sorted:
+            if email[2] < min_grade:
+                break
+        if email[2] >= min_grade:
+            emails_above_grade.append(email)
+    return emails_above_grade
 
 
 def replace_multiple_ch(text, chars_to_replace_list):
@@ -61,6 +74,5 @@ if __name__ == "__main__":
                               list_of_chars_to_replace=list_of_chars_to_replace)
     post_dict = get_rec_email(post_dict)
     post_dict = grade_post(post_dict, search_keys=search_words)
-    emails_and_grades = get_emails_and_grades(post_dict)
-
-    print(1)
+    emails_and_grades = get_emails_and_grades(post_dict, sort=True)
+print(1)

@@ -2,6 +2,7 @@ import logging
 import smtplib
 import pickle
 from creds import gmail_username, gmail_password
+from fb_group_post_scarp import post_dict, emails_and_grades
 from facebook_group_post_scrapper import harvest_emails_fb_group_posts, get_mail_list_from_dict
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
