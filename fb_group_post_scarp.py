@@ -44,7 +44,7 @@ def get_emails_and_grades(post_dict):
     emails_list = []
     for post_id in post_dict:
         if post_dict[post_id]["email"] is not None:
-            emails_list.append((post_id, post_id["email"], post_id["grade"]))
+            emails_list.append((post_id, post_dict[post_id]["email"], post_dict[post_id]["grade"]))
     return emails_list
 
 

@@ -17,11 +17,11 @@ def send_resume_to_rec(emails_list, mail_grade, mail_subject_line, email_content
     sender_address = gmail_username
     sender_pass = gmail_password
     for receiver in emails_list:
-        if receiver[1] >= mail_grade and receiver[0] not in sent_email_addresses:
+        if receiver[2] >= mail_grade and receiver[1] not in sent_email_addresses:
             # Setup the MIME
             message = MIMEMultipart()
             message['From'] = "Eran Nir <{}>".format(sender_address)
-            message['To'] = receiver[0]
+            message['To'] = receiver[1]
             message['Subject'] = mail_subject_line  # The subject line
             # The body and the attachments for the mail
 
@@ -39,9 +39,9 @@ def send_resume_to_rec(emails_list, mail_grade, mail_subject_line, email_content
             session.starttls()  # enable security
             session.login(sender_address, sender_pass)  # login with mail_id and password
             text = message.as_string()
-            session.sendmail(sender_address, receiver[0], text)
+            session.sendmail(sender_address, receiver[1], text)
             session.quit()
-            logging.info('Mail sent to: %s', receiver[0])
+            logging.info('Mail sent to: %s', receiver[1])
             sent_email_addresses.append(receiver)
         else:
             logging.info("Did not send mail to {} due to low grade.".format(receiver))
