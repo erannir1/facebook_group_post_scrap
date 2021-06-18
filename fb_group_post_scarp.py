@@ -5,6 +5,24 @@ from creds import fb_username, fb_password
 from parameters import sent_email_addresses_path, list_of_chars_to_replace, group_id, number_of_page_to_harvest, search_words
 
 
+class Post:
+    def __init__(self, scrapper, group_id, post_id, text, email, grade):
+        self.group_id = group_id
+        self.post_id = post_id
+        self.text = text
+        self.email = email
+        self.grade = grade
+
+    def rewrite_text(self, chars_to_replace):
+        for ch in chars_to_replace:
+            if ch in self.text:
+                text = self.text.replace(ch, " ")
+                return text
+            else:
+                return self.text
+        return text
+
+
 def get_post_info(group_id, pages_to_harvest, list_of_chars_to_replace):
     post_dict = {}
     for post in get_posts(group_id, pages=pages_to_harvest, credentials=(fb_username, fb_password)):
@@ -27,6 +45,15 @@ def get_rec_email(post_dict):
                 post_dict[post_id]['email'] = word
     return post_dict
 
+
+def get_older_email_addresses(path):
+    try:
+        with open(path, "rb") as seap:   # Unpickling
+            sent_email_addresses = pickle.load(seap)
+    except FileNotFoundError as fnfe:
+        logging.info("File not found in path: {}\n Continuing without older emails list".format(path))
+        sent_email_addresses = []
+    return sent_email_addresses
 
 def grade_post(post_dict, search_keys):
     for post_id in post_dict:
