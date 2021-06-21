@@ -16,6 +16,8 @@ def get_post_info(group_id, pages_to_harvest, list_of_chars_to_replace):
 
 
 def get_rec_email(post_dict):
+    must_email_chars = ["@", "."]
+    changed_email_chars = ["co", "il", "com", "org"]
     try:
         with open(sent_email_addresses_path, "rb") as seap:   # Unpickling
             sent_email_addresses = pickle.load(seap)
@@ -23,7 +25,9 @@ def get_rec_email(post_dict):
         sent_email_addresses = []
     for post_id in post_dict:
         for word in post_dict[post_id]['post_replaced_text'].split():
-            if '@' in word and word not in sent_email_addresses:
+            is_must_chars_in_email = all(x in word for x in must_email_chars)
+            is_changed_chars_in_email = any(x in word for x in changed_email_chars)
+            if is_must_chars_in_email and is_changed_chars_in_email and word not in sent_email_addresses:
                 post_dict[post_id]['email'] = word
     return post_dict
 
