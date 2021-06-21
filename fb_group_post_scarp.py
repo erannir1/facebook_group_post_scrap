@@ -2,7 +2,8 @@ import logging
 import pickle
 from facebook_scraper import get_posts
 from creds import fb_username, fb_password
-from parameters import sent_email_addresses_path, list_of_chars_to_replace, group_id, number_of_page_to_harvest, search_words
+from parameters import sent_email_addresses_path, list_of_chars_to_replace, group_id, number_of_page_to_harvest, \
+    search_words, min_grade
 
 
 def get_post_info(group_id, pages_to_harvest, list_of_chars_to_replace):
@@ -89,3 +90,4 @@ if __name__ == "__main__":
     post_dict = get_rec_email(post_dict)
     post_dict = grade_post(post_dict, search_keys=search_words)
     emails_and_grades = get_emails_and_grades(post_dict, sort=True)
+    email_above_grade = get_emails_above_grade(emails_and_grades, min_grade=min_grade, is_list_sorted=True)

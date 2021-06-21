@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 from parameters import sent_email_addresses_path, search_words, group_id, mail_subject, mail_attach, mail_content_path,\
-    number_of_page_to_harvest
+    number_of_page_to_harvest, list_of_chars_to_replace, min_grade
 
 
 def send_resume_to_rec(emails_list, mail_grade, mail_subject_line, email_content, attachment):
@@ -53,11 +53,7 @@ def upload_list_pickle(list_to_upload, path, upload=False):
 
 
 if __name__ == "__main__":
-    emails_dict = harvest_emails_fb_group_posts(group_id=group_id, pages_to_harvest=number_of_page_to_harvest,
-                                                search_keys=search_words)
-    sorted_emails_tup_list = get_mail_list_from_dict(emails_dict)
-    grade = len(search_words) * 0.4
     mail_content = open(mail_content_path).read()
-    sent_email_addresses_list = send_resume_to_rec(sorted_emails_tup_list,
-                                                   grade, mail_subject, mail_content, mail_attach)
+    sent_email_addresses_list = send_resume_to_rec(emails_and_grades, min_grade, mail_subject, mail_content,
+                                                   mail_attach)
     upload_list_pickle(list_to_upload=sent_email_addresses_list, path=sent_email_addresses_path, upload=False)
