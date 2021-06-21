@@ -21,7 +21,7 @@ def get_rec_email(post_dict):
     try:
         with open(sent_email_addresses_path, "rb") as seap:   # Unpickling
             sent_email_addresses = pickle.load(seap)
-    except FileNotFoundError as fnfe:
+    except FileNotFoundError as e:
         sent_email_addresses = []
     for post_id in post_dict:
         for word in post_dict[post_id]['post_replaced_text'].split():
@@ -36,7 +36,7 @@ def get_older_email_addresses(path):
     try:
         with open(path, "rb") as seap:   # Unpickling
             sent_email_addresses = pickle.load(seap)
-    except FileNotFoundError as fnfe:
+    except FileNotFoundError as e:
         logging.info("File not found in path: {}\n Continuing without older emails list".format(path))
         sent_email_addresses = []
     return sent_email_addresses
