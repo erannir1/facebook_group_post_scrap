@@ -89,4 +89,3 @@ if __name__ == "__main__":
     post_dict = get_rec_email(post_dict)
     post_dict = grade_post(post_dict, search_keys=search_words)
     emails_and_grades = get_emails_and_grades(post_dict, sort=True)
-print(1)
